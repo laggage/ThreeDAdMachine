@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="ThreeDAdMachine.View.WarningFlyout"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid MinHeight="150">
+        <TextBlock Text="{Binding WarningInfo,Mode=OneWay}"
+                   Margin="10"
+                   FontSize="22"/>
+        <Grid VerticalAlignment="Bottom" 
+              Background="{DynamicResource AccentColorBrush2}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="2"
+                    Margin="5" Padding="30 10"
+                    Content="_Close"
+                    IsCancel="True"
+                    Command="{Binding CloseFlyoutCommand}"
+                    Style="{DynamicResource MetroFlatButton}" />
+        </Grid>
+    </Grid>
+</UserControl>

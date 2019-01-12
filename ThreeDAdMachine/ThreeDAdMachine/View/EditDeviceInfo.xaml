@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="ThreeDAdMachine.View.EditDeviceInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" FontSize="16"
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    Orientation="Horizontal"
+                    DataContext="{Binding CurrentDevice}">
+            <WrapPanel Margin="10">
+                <TextBlock Text="名称:" Margin="0 0 15 1"/>
+                <TextBox Text="{Binding Name, FallbackValue=未命名,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                         MinWidth="130" MaxHeight="23"/>
+            </WrapPanel>
+            <WrapPanel Margin="10">
+                <TextBlock Text="设备ip:" Margin="0 0 15 1"/>
+                <TextBox VerticalAlignment="Center" MinWidth="130" MaxHeight="23"
+                         Text="{Binding IPAddress, FallbackValue=192.168.0.0,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="10">
+                <TextBlock Text="端口号:" Margin="0 0 15 1"/>
+                <TextBox VerticalAlignment="Center" MinWidth="130" MaxHeight="23"
+                         Text="{Binding Port, FallbackValue=8888,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+        </StackPanel>
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                Content="确认" Padding="15 8" FontSize="16"
+                Margin="30 40"
+                Command="{Binding AddDeviceCommand}"/>
+    </Grid>
+</UserControl>

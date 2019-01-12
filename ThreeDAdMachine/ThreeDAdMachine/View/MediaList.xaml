@@ -1,0 +1,498 @@
+﻿<UserControl x:Class="ThreeDAdMachine.View.MediaList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i ="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:view="clr-namespace:ThreeDAdMachine.View"
+             xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:converter="clr-namespace:ThreeDAdMachine.Converters"
+             xmlns:ctrl="clr-namespace:LaUI.Control;assembly=LaUI">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/HamburgerMenuTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- MultiConverter -->
+            <converter:MediaTypeConverter x:Key="MediaTypeConverter"/>
+            <converter:PathToImageSourceMultiConverter x:Key="PathToImageSourceMultiConv"/>
+            <!-- /MultiConverter -->
+
+            <!-- Converter -->
+            <converter:SizeToStringConverter x:Key="SizeConverter"/>
+            <converter:FileSizeToStringConverter x:Key="FileSizeConverter"/>
+            <converter:NumMultiplyConverter x:Key="NumMultiplyConv"/>
+            <!-- /Converter -->
+
+            <Style x:Key="HamburgerMenuCreatorsOptionsItemStyle"
+               BasedOn="{StaticResource HamburgerMenuItemStyle}"
+               TargetType="{x:Type ListBoxItem}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                        <Setter Property="Foreground" Value="{DynamicResource AccentBaseColorBrush}"/>
+                    </Trigger>
+                    <!--<EventTrigger RoutedEvent="Selected">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsSelected" >
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>-->
+                </Style.Triggers>
+                <Setter Property="metro:ItemHelper.ActiveSelectionBackgroundBrush" Value="Transparent" />
+                <Setter Property="metro:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource AccentBaseColorBrush}" />
+                <Setter Property="metro:ItemHelper.DisabledForegroundBrush" Value="{DynamicResource GrayNormalBrush}" />
+                <Setter Property="metro:ItemHelper.DisabledSelectedBackgroundBrush" Value="Transparent" />
+                <Setter Property="metro:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource GrayNormalBrush}" />
+                <Setter Property="metro:ItemHelper.HoverBackgroundBrush" Value="{DynamicResource GrayBrush9}" />
+            </Style>
+
+            <Style x:Key="HamburgerMenuCreatorsItemStyle"
+                   BasedOn="{StaticResource HamburgerMenuItemStyle}"
+                   TargetType="{x:Type ListBoxItem}">
+                <Setter Property="metro:ItemHelper.ActiveSelectionBackgroundBrush" Value="Transparent" />
+                <Setter Property="metro:ItemHelper.DisabledForegroundBrush" Value="{DynamicResource GrayNormalBrush}" />
+                <Setter Property="metro:ItemHelper.DisabledSelectedBackgroundBrush" Value="Transparent" />
+                <Setter Property="metro:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource GrayNormalBrush}" />
+                <Setter Property="metro:ItemHelper.HoverBackgroundBrush" Value="Transparent" />
+                <Setter Property="metro:ItemHelper.HoverSelectedBackgroundBrush" Value="Transparent" />
+                <Setter Property="metro:ItemHelper.SelectedBackgroundBrush" Value="Transparent" />
+            </Style>
+
+            <Style x:Key="HamburgerMenuCreatorsStyle"
+                   BasedOn="{StaticResource {x:Type metro:HamburgerMenu}}"
+                   TargetType="{x:Type metro:HamburgerMenu}">
+                <Setter Property="ItemContainerStyle" Value="{StaticResource HamburgerMenuCreatorsItemStyle}" />
+                <Setter Property="OptionsItemContainerStyle" Value="{StaticResource HamburgerMenuCreatorsOptionsItemStyle}" />
+                <Setter Property="PaneBackground" Value="{DynamicResource WhiteBrush}" />
+                <Setter Property="PaneForeground" Value="{DynamicResource TextBrush}" />
+                <Setter Property="ShowSelectionIndicator" Value="False" />
+            </Style>
+
+            <!--图片项的数据模板-->
+            <DataTemplate x:Key="ImageItemTemplate">
+                <Border>
+                    <Grid HorizontalAlignment="Left">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="6*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Height="64" Width="64"
+                               Grid.Row="0" Grid.Column="0" Margin="5" Stretch="Fill"
+                               gif:AnimationBehavior.SourceUri="{Binding Path=Path}"
+                               Grid.RowSpan="4"/>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="3"
+                                       Text="{Binding Path = Name,Mode=OneWay, FallbackValue=Laggage.jpg}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1"  Margin="3"
+                                       Text="{Binding Path = Path,Mode=OneWay,FallbackValue=D:/Media/Image/Laggage.jpg}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="2"  Margin="3"
+                                       Text="{Binding FileSize,Converter={StaticResource FileSizeConverter}, 
+                                Mode=OneWay,FallbackValue=-2.73M}" />
+                        <TextBlock Grid.Column="1" Grid.Row="3"  Margin="3"
+                                       Text="{Binding FrameSize,Converter={StaticResource SizeConverter},
+                                Mode=OneWay, FallbackValue=-300 x -300}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!--视频的数据模板-->
+            <DataTemplate x:Key="VideoItemTemplate">
+                <Border>
+                    <Border.Resources>
+                        <converter:StringAppendConverter x:Key="StringAppendConverter"/>
+                    </Border.Resources>
+                    <Grid HorizontalAlignment="Left" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="6*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Row="0" Grid.Column="0"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Height="64" Width="64"
+                               Margin="5" Stretch="Fill"
+                               Grid.RowSpan="5"
+                               Source="{Binding Path = Thumbnail}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="3"
+                                       Text="{Binding Path = Name,Mode=OneWay, FallbackValue=Laggage.jpg}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1"  Margin="3"
+                                       Text="{Binding Path = Path,Mode=OneWay,FallbackValue=D:/Media/Image/Laggage.jpg}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="2"  Margin="3"
+                                       Text="{Binding FileSize,Converter={StaticResource FileSizeConverter}, 
+                                Mode=OneWay,FallbackValue=-2.73M}" />
+                        <TextBlock Grid.Column="1" Grid.Row="3"  Margin="3"
+                                   Text="{Binding FrameSize,Converter={StaticResource SizeConverter},
+                                Mode=OneWay, FallbackValue=-300 x -300}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="4"  Margin="3"
+                                   Text="{Binding Frames,Mode=OneWay, ConverterParameter=帧,
+                            Converter={StaticResource StringAppendConverter},
+                            FallbackValue=-300 x -300}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <metro:HamburgerMenu Grid.Column="0" x:Name="MediaListHamburger"
+                                 HamburgerWidth="84"
+                                 DisplayMode="CompactOverlay"
+                                 CompactPaneLength="84"
+                                 OptionsItemClick="MediaListHamburger_OptionsItemClick"
+                                 Style="{StaticResource HamburgerMenuCreatorsStyle}">
+                <metro:HamburgerMenu.Content>
+                    <MultiBinding Mode="OneWay"
+                                  Converter="{StaticResource MediaTypeConverter}">
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}"
+                                 Path="DataContext.EditingImage" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}"
+                                 Path="DataContext.EditingVideo" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </metro:HamburgerMenu.Content>
+
+                <metro:HamburgerMenu.ItemsSource>
+                    <metro:HamburgerMenuItemCollection>
+                        <metro:HamburgerMenuGlyphItem>
+                            <metro:HamburgerMenuGlyphItem.Tag>
+                                <ctrl:Accordion ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                    <ctrl:AccordionItem Header="Images" IsSelected="True">
+                                            <ListBox x:Name="listBoxImage"
+                                                     SelectedItem="{Binding Path = DataContext.EditingImage,Mode=TwoWay,
+                                           RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:HamburgerMenu}},
+                                            UpdateSourceTrigger=PropertyChanged}" 
+                                                     ItemsSource="{Binding Path=DataContext.ImageModels, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:HamburgerMenu}}}"
+                                                     ItemTemplate="{StaticResource ImageItemTemplate}"/>
+                                    </ctrl:AccordionItem>
+
+                                    <ctrl:AccordionItem Header="Videos">
+                                        <ListBox Name="listBoxVideo" 
+                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                 SelectedItem="{Binding Path = DataContext.EditingVideo,Mode=TwoWay,
+                                           RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:HamburgerMenu}},
+                                            UpdateSourceTrigger=PropertyChanged}" 
+                                             ItemsSource="{Binding Path=DataContext.VideoModels, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:HamburgerMenu}}}"
+                                             ItemTemplate="{StaticResource VideoItemTemplate}"/>
+                                    </ctrl:AccordionItem>
+                                </ctrl:Accordion>
+                            </metro:HamburgerMenuGlyphItem.Tag>
+                        </metro:HamburgerMenuGlyphItem>
+                    </metro:HamburgerMenuItemCollection>
+                </metro:HamburgerMenu.ItemsSource>
+
+                <metro:HamburgerMenu.ItemTemplate>
+                    <DataTemplate DataType="{x:Type metro:HamburgerMenuGlyphItem}">
+                        <ContentControl Content="{Binding Tag}"/>
+                    </DataTemplate>
+                </metro:HamburgerMenu.ItemTemplate>
+
+                <metro:HamburgerMenu.ContentTemplate>
+                    <DataTemplate>
+                        <Border>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="48"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal"
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding  Path=DataContext.MediaStateDescription, Mode=OneWay,
+                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" FontSize="16" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Name}" FontSize="16" VerticalAlignment="Center" 
+                                           FontWeight="Bold"/>
+                                    <view:MediaSampleView Height="28" Width="28" Margin="10 0 0 0"
+                                                          Foreground="Black" FontSize="12"
+                                                          DataContext="{Binding Path=DataContext.MediaSampleViewModel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                </StackPanel>
+
+                                <ScrollViewer Grid.Row="1" 
+                                              HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <Grid>
+                                        <ctrl:MediaBox x:Name="EditingImg" 
+                                                       Url="{Binding Path=Path}"
+                                                       Stretch="Fill"
+                                                       Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},
+                                            Path=DataContext.DragRegion.Height}"
+                                                       Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},
+                                            Path=DataContext.DragRegion.Width}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       VerticalContentAlignment="Top"/>
+                                        <Canvas Height="{Binding ElementName=EditingImg,Path=ActualHeight,Mode=OneWay}"
+                                                Width="{Binding ElementName=EditingImg,Path=ActualWidth,Mode=OneWay}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                            <ctrl:SelectRegionCtrl x:Name="selectedCtrl"
+                                                                   Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},
+                                                                            Path=DataContext.Radius,Mode=OneWay,
+                                                                            Converter={StaticResource NumMultiplyConv},
+                                                                            ConverterParameter=2}"
+                                                                   Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},
+                                                                            Path=DataContext.Radius,Mode=OneWay,
+                                                                            Converter={StaticResource NumMultiplyConv},
+                                                                            ConverterParameter=2}"
+                                                                   MaxHeight="{Binding Path=DataModel.MaxRadius,Mode=OneWay,
+                                                                                UpdateSourceTrigger=PropertyChanged,
+                                                                                Converter={StaticResource NumMultiplyConv},
+                                                                                ConverterParameter=2}"
+                                                                   MaxWidth="{Binding Path=DataModel.MaxRadius,Mode=OneWay,
+                                                                                UpdateSourceTrigger=PropertyChanged,
+                                                                                Converter={StaticResource NumMultiplyConv},
+                                                                                ConverterParameter=2}"
+                                                                   SelectedRegion="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},
+                                                                                    Path=DataContext.SelectedRegion, 
+                                                                                    Mode=TwoWay,
+                                                                                    UpdateSourceTrigger=PropertyChanged}"
+                                                                   DragRegion="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},
+                                                                                Path=DataContext.DragRegion,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                        </Canvas>
+                                    </Grid>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </metro:HamburgerMenu.ContentTemplate>
+
+                <metro:HamburgerMenu.OptionsItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="48">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="84"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ContentControl Grid.Column="0"
+                                        Content="{Binding Tag}"
+                                        Focusable="False"
+                                        IsTabStop="False"/>
+                            <TextBlock Grid.Column="1" 
+                                   Text="{Binding Label}"
+                                   FontSize="16"
+                                   VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </metro:HamburgerMenu.OptionsItemTemplate>
+
+                <metro:HamburgerMenu.OptionsItemsSource>
+                    <metro:HamburgerMenuItemCollection>
+                        <metro:HamburgerMenuGlyphItem Label="Add Image" 
+                                                      Command="{Binding AddMediaCommand}"
+                                                      CommandParameter="false">
+                            <metro:HamburgerMenuGlyphItem.Tag>
+                                <iconPacks:PackIconMaterial Width="36"
+                                                        Height="36"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Kind="ImageAlbum"/>
+                            </metro:HamburgerMenuGlyphItem.Tag>
+                        </metro:HamburgerMenuGlyphItem>
+                        <metro:HamburgerMenuGlyphItem Label="Add Video" 
+                                                      Command="{Binding AddMediaCommand}"
+                                                      CommandParameter="true">
+                            <metro:HamburgerMenuGlyphItem.Tag>
+                                <iconPacks:PackIconMaterial Width="36"
+                                                            Height="36"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Kind="FileVideo"/>
+                            </metro:HamburgerMenuGlyphItem.Tag>
+                        </metro:HamburgerMenuGlyphItem>
+                        <metro:HamburgerMenuGlyphItem Label="Search image at cloud">
+                            <metro:HamburgerMenuGlyphItem.Tag>
+                                <iconPacks:PackIconMaterial Width="36"
+                                                        Height="36"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Kind="CloudDownload"/>
+                            </metro:HamburgerMenuGlyphItem.Tag>
+                        </metro:HamburgerMenuGlyphItem>
+                    </metro:HamburgerMenuItemCollection>
+                </metro:HamburgerMenu.OptionsItemsSource>
+
+            </metro:HamburgerMenu>
+
+            <Grid Margin="30 48" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Ellipse Height="300" Width="300" Grid.Row="0">
+                    <Ellipse.Fill>
+                        <ImageBrush Viewport="0 0 300 300"
+                                    Viewbox ="{Binding Path=SelectedRegion,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                    ViewboxUnits="Absolute" 
+                                    ViewportUnits="Absolute"
+                                    Stretch="Fill">
+                            <ImageBrush.ImageSource>
+                                <MultiBinding Mode="OneWay" Converter="{StaticResource PathToImageSourceMultiConv}">
+                                    <Binding Path="EditingImage.Path"/>
+                                    <Binding Path="EditingVideo" UpdateSourceTrigger="PropertyChanged"/>
+                                </MultiBinding>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <ScrollViewer Grid.Row="1" VerticalAlignment="Center"
+                              VerticalScrollBarVisibility="Auto"
+                              MaxWidth="400">
+                    <Grid>
+                        <StackPanel>
+                            <GroupBox Header="播放设置" Margin="10 15">
+                                <Grid  Grid.IsSharedSizeScope="True" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Margin="0 15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="TextInfo" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="SliderValue"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="时间(秒)"/>
+                                        <Slider Grid.Column="1" Name="sliderTime" Interval="1" Margin="10 0"
+                                    Width="200" Maximum="100">
+                                            <Slider.Value>
+                                                <Binding Path="PlayTime">
+                                                    <Binding.Converter>
+                                                        <converter:TimeSpanToSecondsConverter/>
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </Slider.Value>
+                                        </Slider>
+                                        <TextBlock Grid.Column="2" Text="{Binding ElementName=sliderTime,Path=Value,StringFormat={}{0:f0}}"/>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" Margin="0 15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="TextInfo"/>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="循环"/>
+                                        <Slider Grid.Column="1" Name="sliderCircle" Maximum="100" Margin="10 0" 
+                                    Width="200"
+                                    Value="{Binding CircleTimes,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding ElementName=sliderCircle,Path=Value,StringFormat={}{0:f0}}"/>
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+
+                            <GroupBox Header="采样设置" 
+                          Margin="10 15">
+                                <Grid  Grid.IsSharedSizeScope="True">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Margin="0 15" HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="TextInfo" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="SliderValue"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="采样点数"/>
+                                        <Slider Grid.Column="1" Name="sliderRaidus" Interval="1" Margin="10 0" 
+                                    MinWidth="200" Minimum="1" Maximum="{Binding MaxRadius, Mode=OneWay}"
+                                    Value="{Binding Radius,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Margin="3 0" Grid.Column="2" Text="{Binding ElementName=sliderRaidus,Path=Value,StringFormat={}{0:f0}}"/>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" Margin="0 15" HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="TextInfo" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="SliderValue"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="间隔角度(度)"/>
+                                        <Slider Grid.Column="1" Name="sliderIntervalAngle"  
+                                    Margin="10 0" 
+                                    MinWidth="200" SmallChange="0.1" LargeChange="0.1" Minimum="0"  Maximum="1" 
+                                    Value="{Binding IntervalAngle,Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Margin="3 0"  Grid.Column="2" Text="{Binding ElementName=sliderIntervalAngle,Path=Value,StringFormat={}{0:f1}}"/>
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+
+                            <GroupBox Header="控制"
+                          Margin="10 15">
+                                <WrapPanel>
+                                    <WrapPanel.Resources>
+                                        <Style BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Margin" Value="10"/>
+                                            <Setter Property="Padding" Value="10"/>
+                                            <Setter Property="FontSize" Value="12"/>
+                                        </Style>
+                                    </WrapPanel.Resources>
+                                    <Button Content="生成数据文件"
+                                Command="{Binding BuildMediaSampleDataCommand}"/>
+                                    <Button Content="删除当前项"
+                                Command="{Binding DeleteMediaItemCommand}"/>
+                                    <Button Content="资源管理器中打开数据文件"
+                                            Command="{Binding OpenDataFileInExploreCommand}"/>
+                                    <metro:DropDownButton Name="DropDownBtnDevices" DataContext="{Binding DeviceAndConnectViewModel,Mode=OneWay}" 
+                                                          ItemsSource="{Binding Devices,Mode=OneWay}"
+                                                          Orientation="Horizontal" 
+                                                          ArrowVisibility="Visible"
+                                                          BorderThickness="0"
+                                                          Margin="10" Padding="10"
+                                                          FontSize="12"
+                                                          ButtonStyle="{DynamicResource MahApps.Metro.Styles.MetroButton}">
+                                        <metro:DropDownButton.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <TextBlock Text="{Binding Name}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <i:InvokeCommandAction Command="{Binding DataContext.AddMediaToDeviceCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:DropDownButton}}}"
+                                                                                       CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TextBlock}}}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </metro:DropDownButton.ItemTemplate>
+                                        <metro:DropDownButton.Icon>
+                                            <Grid>
+                                                <TextBlock Text="添加到设备列表"/>
+                                            </Grid>
+                                        </metro:DropDownButton.Icon>
+                                    </metro:DropDownButton>
+                                </WrapPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

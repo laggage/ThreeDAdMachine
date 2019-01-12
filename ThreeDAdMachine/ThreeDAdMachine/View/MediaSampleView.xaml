@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="ThreeDAdMachine.View.MediaSampleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i ="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:behavior="clr-namespace:LaUI.Behavior;assembly=LaUI"
+             metro:VisibilityHelper.IsVisible="{Binding IsActive, FallbackValue=False}">
+    <Canvas>
+        <metro:ProgressRing IsActive="{Binding IsActive}" 
+                            IsLarge="True"
+                            Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+        <TextBlock metro:VisibilityHelper.IsVisible="{Binding ReportProgressDetail}"
+                   Text="{Binding ProgressValue}"
+                   Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+            <i:Interaction.Behaviors>
+                <behavior:CenterInCanvas/>
+            </i:Interaction.Behaviors>
+        </TextBlock>
+    </Canvas>
+</UserControl>
