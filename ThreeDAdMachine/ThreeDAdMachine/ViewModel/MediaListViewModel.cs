@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -24,6 +24,7 @@ namespace ThreeDAdMachine.ViewModel
 
         public MediaListViewModel()
         {
+            //initialize command
             LoadDataCommand = new DelegateCommand(LoadData);
             AddMediaCommand = new DelegateCommand<object>(AddMedia);
             BuildMediaSampleDataCommand = new DelegateCommand(BuildMediaSampleData);
@@ -32,8 +33,6 @@ namespace ThreeDAdMachine.ViewModel
 
             if(Application.Current.MainWindow != null) Application.Current.MainWindow.Closing += MainWindow_Closing; ;
         }
-
-       
 
         #endregion
 
@@ -131,7 +130,11 @@ namespace ThreeDAdMachine.ViewModel
 
         public ImageModel EditingImage
         {
-            get => _editingImage;
+            get
+            {
+                ApplySettingToMedia(_editingImage);
+                return _editingImage;
+            }
             set
             {
                 if (_editingImage == value)
@@ -155,7 +158,11 @@ namespace ThreeDAdMachine.ViewModel
 
         public VideoModel EditingVideo
         {
-            get => _editingVideo;
+            get
+            {
+                ApplySettingToMedia(_editingVideo);
+                return _editingVideo;
+            }
             set
             {
                 if (_editingVideo == value)
@@ -475,6 +482,12 @@ namespace ThreeDAdMachine.ViewModel
 
         #endregion
 
+        #region AddMediaToDeviceCommand 
+
+        //public DelegateCommand
+
+        #endregion
+
         #endregion
 
         #region Method
@@ -573,7 +586,7 @@ namespace ThreeDAdMachine.ViewModel
                 ApplySettingToMedia(_editingVideo);
         }
 
-        private void ApplySettingToMedia(MediaBaseModel media)
+        public void ApplySettingToMedia(MediaBaseModel media)
         {
             if (media == null)
                 return;

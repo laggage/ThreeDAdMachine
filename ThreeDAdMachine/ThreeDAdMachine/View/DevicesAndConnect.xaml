@@ -22,7 +22,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  MinHeight="120"
                  MaxHeight="240"
-                 SelectedItem="{Binding CurrentDevice}"
+                 SelectedItem="{Binding ProcessingDevice}"
                  metro:ItemHelper.ActiveSelectionBackgroundBrush="Transparent">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -81,7 +81,7 @@
                             </WrapPanel>
                             <WrapPanel Grid.Row="1" HorizontalAlignment="Left">
                                 <TextBlock Text="设备 ip: " Margin="5 0"/>
-                                <TextBlock Text="{Binding IPAddress,Mode=OneWay}" Margin="5 0"/>
+                                <TextBlock Text="{Binding IpAddress,Mode=OneWay}" Margin="5 0"/>
                             </WrapPanel>
                             <WrapPanel Grid.Row="2" HorizontalAlignment="Left">
                                 <TextBlock Text="端口号:" Margin="5 0"/>
@@ -95,7 +95,10 @@
                                 <!--<Button FontSize="12" Content="连接" Margin="3" 
                                     HorizontalAlignment="Right" Padding="15 3"/>-->
                                 <Button FontSize="12" Content="设备控制" Margin="3" Padding="15 3" 
-                                    HorizontalAlignment="Center"/>
+                                        HorizontalAlignment="Center" 
+                                        Command="{Binding DataContext.OpenDeviceControlWindowCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged,Mode=OneWay,
+                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"/>
                                 <Button FontSize="12" Content="编辑" Margin="3" Padding="15 3"
                                     HorizontalAlignment="Left" ClickMode="Release"
                                     Command="{Binding DataContext.OpenEditDeviceViewCommand,

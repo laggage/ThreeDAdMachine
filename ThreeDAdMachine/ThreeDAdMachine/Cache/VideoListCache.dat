@@ -1,0 +1,22 @@
+[
+  {
+    "Path": "E:\\Media\\VedioAndMovie\\1.mp4",
+    "PlayTime": "1.12:00:00",
+    "FrameSize": "960,540",
+    "Frames": 5400,
+    "Name": "1.mp4",
+    "FileSize": 24402275,
+    "DataModel": {
+      "DataPath": "./MediaData/1/1.bin",
+      "SelectedRegion": "613,1,336,336",
+      "MaxRadius": 240,
+      "MinRadius": 0,
+      "Radius": 168,
+      "IntervalAngle": 0.8
+    },
+    "PlaySettingModel": {
+      "PlayTime": "00:00:10",
+      "CircleTimes": 3
+    }
+  }
+]

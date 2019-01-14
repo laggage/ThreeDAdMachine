@@ -1,0 +1,21 @@
+[
+  {
+    "ImageType": 13780,
+    "FrameSize": "1681,832",
+    "Path": "E:\\Media\\Images\\Src\\20180129110247911.png",
+    "Name": "20180129110247911.png",
+    "FileSize": 442019,
+    "DataModel": {
+      "DataPath": "./MediaData/20180129110247911/20180129110247911.bin",
+      "SelectedRegion": "3,81,574,574",
+      "MaxRadius": 416,
+      "MinRadius": 0,
+      "Radius": 287,
+      "IntervalAngle": 0.8
+    },
+    "PlaySettingModel": {
+      "PlayTime": "00:00:10",
+      "CircleTimes": 3
+    }
+  }
+]

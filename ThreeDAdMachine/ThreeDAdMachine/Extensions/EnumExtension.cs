@@ -11,8 +11,7 @@ namespace ThreeDAdMachine.Extensions
             string value = enumValue.ToString();
             FieldInfo field = enumValue.GetType().GetField(value);
             object[] obj = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
-            if (obj == null||obj.Length == 0)
-                return value;
+            if (obj == null || obj.Length == 0) return value;
             return ((DescriptionAttribute)obj[0]).Description;
         }
     }

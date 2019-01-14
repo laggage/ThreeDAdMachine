@@ -1,6 +1,7 @@
 ﻿<Application x:Class="ThreeDAdMachine.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Communication.Models;assembly=Communication"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -13,7 +14,26 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
 
-    </Application.Resources>
+            <DataTemplate x:Key="DeviceItemTemplate" DataType="models:Device">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="{Binding Path=ThumbnailPath,Mode=OneWay}"
+                           Stretch="Fill"
+                           Width="40" Height="40"/>
+
+                    <StackPanel Grid.Column="1" Margin="5 0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Path=Name,Mode=OneWay}"/>
+                        <TextBlock Text="{Binding Path=IpAddress,Mode=OneWay}"/>
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+</Application.Resources>
 </Application>

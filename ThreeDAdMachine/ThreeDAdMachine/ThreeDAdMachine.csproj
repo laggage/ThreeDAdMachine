@@ -110,8 +110,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BoolToStringConverter.cs" />
+    <Compile Include="Converters\DeviceStateToStringConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Converters\FileSizeToStringConverter.cs" />
+    <Compile Include="Converters\IntToTextConverter.cs" />
     <Compile Include="Converters\MediaTypeConverter.cs" />
     <Compile Include="Converters\NumMultiplyConverter.cs" />
     <Compile Include="Converters\PathToImageSourceMultiConverter.cs" />
@@ -127,6 +130,15 @@
     <Compile Include="ViewModel\MediaListViewModel.cs" />
     <Compile Include="ViewModel\MediaSampleViewModel.cs" />
     <Compile Include="ViewModel\WarningFlyoutViewModel.cs" />
+    <Compile Include="View\DeviceCommandsView.xaml.cs">
+      <DependentUpon>DeviceCommandsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeviceControlWindow.xaml.cs">
+      <DependentUpon>DeviceControlWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeviceMediaControlView.xaml.cs">
+      <DependentUpon>DeviceMediaControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DevicesAndConnect.xaml.cs">
       <DependentUpon>DevicesAndConnect.xaml</DependentUpon>
     </Compile>
@@ -149,6 +161,18 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DeviceCommandsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DeviceControlWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DeviceMediaControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DevicesAndConnect.xaml">
       <SubType>Designer</SubType>

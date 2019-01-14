@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 
 namespace MediaProcess.Model
@@ -8,10 +7,6 @@ namespace MediaProcess.Model
     {
         #region Constructor
 
-        //protected MediaBaseModel(Size mediaSize)
-        //{
-        //    DataModel = new DataModel(Path, mediaSize);
-        //}
 
         #endregion
 
@@ -30,5 +25,7 @@ namespace MediaProcess.Model
         public virtual Size FrameSize { get; protected set; }
 
         #endregion
+
+        public override string ToString() => Name;
     }
 }

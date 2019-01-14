@@ -1,23 +1,25 @@
 ﻿<UserControl x:Class="ThreeDAdMachine.View.MediaList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
              xmlns:i ="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:view="clr-namespace:ThreeDAdMachine.View"
              xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:converter="clr-namespace:ThreeDAdMachine.Converters"
-             xmlns:ctrl="clr-namespace:LaUI.Control;assembly=LaUI">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+             xmlns:ctrl="clr-namespace:LaUI.Control;assembly=LaUI"
+             xmlns:viewModel="clr-namespace:ThreeDAdMachine.ViewModel"
+             xmlns:model="clr-namespace:MediaProcess.Model;assembly=MediaProcess"
+             d:DataContext="{d:DesignInstance viewModel:MediaListViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/HamburgerMenuTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
 
             <!-- MultiConverter -->
             <converter:MediaTypeConverter x:Key="MediaTypeConverter"/>
@@ -78,7 +80,7 @@
             </Style>
 
             <!--图片项的数据模板-->
-            <DataTemplate x:Key="ImageItemTemplate">
+            <DataTemplate x:Key="ImageItemTemplate" DataType="model:ImageModel">
                 <Border>
                     <Grid HorizontalAlignment="Left">
                         <Grid.RowDefinitions>
@@ -111,7 +113,7 @@
             </DataTemplate>
 
             <!--视频的数据模板-->
-            <DataTemplate x:Key="VideoItemTemplate">
+            <DataTemplate x:Key="VideoItemTemplate" DataType="model:VideoModel">
                 <Border>
                     <Border.Resources>
                         <converter:StringAppendConverter x:Key="StringAppendConverter"/>
@@ -155,6 +157,11 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Border>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -183,7 +190,7 @@
                             <metro:HamburgerMenuGlyphItem.Tag>
                                 <ctrl:Accordion ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                     <ctrl:AccordionItem Header="Images" IsSelected="True">
-                                            <ListBox x:Name="listBoxImage"
+                                            <ListBox x:Name="ListBoxImage"
                                                      SelectedItem="{Binding Path = DataContext.EditingImage,Mode=TwoWay,
                                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:HamburgerMenu}},
                                             UpdateSourceTrigger=PropertyChanged}" 
@@ -192,7 +199,7 @@
                                     </ctrl:AccordionItem>
 
                                     <ctrl:AccordionItem Header="Videos">
-                                        <ListBox Name="listBoxVideo" 
+                                        <ListBox Name="ListBoxVideo" 
                                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                  SelectedItem="{Binding Path = DataContext.EditingVideo,Mode=TwoWay,
                                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:HamburgerMenu}},
@@ -213,7 +220,7 @@
                 </metro:HamburgerMenu.ItemTemplate>
 
                 <metro:HamburgerMenu.ContentTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="model:MediaBaseModel">
                         <Border>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -398,10 +405,10 @@
                                             <ColumnDefinition Width="2*"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="循环"/>
-                                        <Slider Grid.Column="1" Name="sliderCircle" Maximum="100" Margin="10 0" 
+                                        <Slider Grid.Column="1" Name="SliderCircle" Maximum="100" Margin="10 0" 
                                     Width="200"
                                     Value="{Binding CircleTimes,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding ElementName=sliderCircle,Path=Value,StringFormat={}{0:f0}}"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding ElementName=SliderCircle,Path=Value,StringFormat={}{0:f0}}"/>
                                     </Grid>
                                 </Grid>
                             </GroupBox>
@@ -433,18 +440,17 @@
                                             <ColumnDefinition Width="2*"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="间隔角度(度)"/>
-                                        <Slider Grid.Column="1" Name="sliderIntervalAngle"  
+                                        <Slider Grid.Column="1" Name="SliderIntervalAngle"  
                                     Margin="10 0" 
                                     MinWidth="200" SmallChange="0.1" LargeChange="0.1" Minimum="0"  Maximum="1" 
                                     Value="{Binding IntervalAngle,Mode=TwoWay,
                                 UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBlock Margin="3 0"  Grid.Column="2" Text="{Binding ElementName=sliderIntervalAngle,Path=Value,StringFormat={}{0:f1}}"/>
+                                        <TextBlock Margin="3 0"  Grid.Column="2" Text="{Binding ElementName=SliderIntervalAngle,Path=Value,StringFormat={}{0:f1}}"/>
                                     </Grid>
                                 </Grid>
                             </GroupBox>
 
-                            <GroupBox Header="控制"
-                          Margin="10 15">
+                            <GroupBox Header="控制" Margin="10 15">
                                 <WrapPanel>
                                     <WrapPanel.Resources>
                                         <Style BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}" TargetType="{x:Type Button}">
@@ -453,12 +459,13 @@
                                             <Setter Property="FontSize" Value="12"/>
                                         </Style>
                                     </WrapPanel.Resources>
-                                    <Button Content="生成数据文件"
-                                Command="{Binding BuildMediaSampleDataCommand}"/>
+                                    <Button Content="生成数据文件" 
+                                            Command="{Binding BuildMediaSampleDataCommand}"/>
                                     <Button Content="删除当前项"
-                                Command="{Binding DeleteMediaItemCommand}"/>
+                                            Command="{Binding DeleteMediaItemCommand}"/>
                                     <Button Content="资源管理器中打开数据文件"
                                             Command="{Binding OpenDataFileInExploreCommand}"/>
+
                                     <metro:DropDownButton Name="DropDownBtnDevices" DataContext="{Binding DeviceAndConnectViewModel,Mode=OneWay}" 
                                                           ItemsSource="{Binding Devices,Mode=OneWay}"
                                                           Orientation="Horizontal" 
@@ -469,21 +476,24 @@
                                                           ButtonStyle="{DynamicResource MahApps.Metro.Styles.MetroButton}">
                                         <metro:DropDownButton.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid>
-                                                    <TextBlock Text="{Binding Name}">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <i:InvokeCommandAction Command="{Binding DataContext.AddMediaToDeviceCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:DropDownButton}}}"
-                                                                                       CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TextBlock}}}"/>
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </TextBlock>
-                                                </Grid>
+                                                <Border>
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="MouseLeftButtonDown" >
+                                                            <i:InvokeCommandAction Command="{Binding Path=DataContext.AddMediaToDeviceCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type metro:DropDownButton}}}"
+                                                                                   CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Border}}}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+
+                                                    <ContentPresenter HorizontalAlignment="Left"
+                                                                      VerticalAlignment="Center"
+                                                                      ContentTemplate="{StaticResource DeviceItemTemplate}"/>
+                                                </Border>
                                             </DataTemplate>
                                         </metro:DropDownButton.ItemTemplate>
+
                                         <metro:DropDownButton.Icon>
                                             <Grid>
-                                                <TextBlock Text="添加到设备列表"/>
+                                                <TextBlock Text="添加到设备"/>
                                             </Grid>
                                         </metro:DropDownButton.Icon>
                                     </metro:DropDownButton>

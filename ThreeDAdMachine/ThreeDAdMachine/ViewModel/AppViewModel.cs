@@ -21,6 +21,7 @@ namespace ThreeDAdMachine.ViewModel
         public AppViewModel()
         {
             OpenDevicesViewCommand = new DelegateCommand(OpenDevicesView);
+
             DevicesAndConnectViewModel = new DevicesAndConnectViewModel();
             MediaListViewModel = new MediaListViewModel();
             WarningFlyoutViewModel = new WarningFlyoutViewModel();

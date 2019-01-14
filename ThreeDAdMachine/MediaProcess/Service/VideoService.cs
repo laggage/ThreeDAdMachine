@@ -93,8 +93,7 @@ namespace MediaProcess.Service
 
         public static BitmapSource GetRepresentThumbnail(string path,bool randomFrame = true)
         {
-            if (string.IsNullOrEmpty(path))
-                return default(BitmapSource);
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return null;
             using (Capture c = new Capture(path))
             {
                 c.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames,
